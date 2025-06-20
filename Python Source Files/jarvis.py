@@ -36,6 +36,9 @@ w = observation.weather_at_place('Bangalore, India')
 r = sr.Recognizer()
 
 def time():
+    """
+    Returns the current time in decimal hours (e.g., 14.5 for 2:30 PM)
+    """
     hour = int(datetime.now().hour)
     min = int(datetime.now().minute)
     now = hour + (min / 60)
@@ -43,10 +46,21 @@ def time():
 
 
 class VoiceEngine:
+    """
+    Main class for Jarvis voice assistant functionality.
+    Handles speech recognition, text-to-speech, and command processing.
+    """
     def __init__(self):
         pass
 
     def speak(self, audio, block = False):
+        """
+        Converts text to speech and plays it using gTTS.
+        
+        Args:
+            audio (str): Text to be spoken
+            block (bool): If True, blocks until speech completes
+        """
         myobj = gTTS(text=audio, lang=gTTS_lang, tld='us',slow=False)
         if audio != '':
             print(audio)
@@ -61,7 +75,10 @@ class VoiceEngine:
 
     def wish_me(self, salutation="sir"):
         '''
-        @brief: Wishes the user according to day and time
+        Greets the user based on current time of day.
+        
+        Args:
+            salutation (str): How to address the user (default: "sir")
         '''
         hour = int(datetime.now().hour)
         if 0 <= hour < 12:
@@ -80,9 +97,11 @@ class VoiceEngine:
 
     def takeCommand(self):
         '''
-        @brief: It takes microphone input from the user and returns string output
+        Listens to microphone input and returns recognized text.
+        
+        Returns:
+            str: Recognized speech text or "None" if recognition fails
         '''
-        #
         with sr.Microphone() as source:
             # print("Listening...")
             turn_on_led(True, False, False)
@@ -102,10 +121,13 @@ class VoiceEngine:
                 return "None"
             return query
 
-
-    def sendEmail(self, to, content):     # TODO Can you do this through whatsapp?
+    def sendEmail(self, to, content):
         '''
-        @brief This function records message and send message to other contacts
+        Sends an email using SMTP protocol.
+        
+        Args:
+            to (str): Recipient email address
+            content (str): Email message content
         '''
         server = smtplib.SMTP('smtp.gmail.com', 587)  # Email works on SMTP
         server.ehlo()
@@ -114,19 +136,31 @@ class VoiceEngine:
         server.sendmail('sharmasameera91@gmail.com', to, content)  # sends mail
         server.close()  # Closes the server
 
-    def clean_up_cmd(self, query):  # clean up the query
+    def clean_up_cmd(self, query):
+        """
+        Cleans up voice command by removing predefined phrases.
+        
+        Args:
+            query (str): Original voice command
+        """
         for item in clean_up_query:
             if item in query:
                 query = query.replace(item, '')
 
+# Constants for object detection
 detection_timeout = 60 # 60 seconds
 detect_cnt_limit = 5
 
 def run_jarvis(jarvis):
+    """
+    Main execution loop for Jarvis voice assistant.
+    Handles command processing and response generation.
+    
+    Args:
+        jarvis (VoiceEngine): Instance of the VoiceEngine class
+    """
     detect_incr_cnt = 0
-    '''
-    @brief: This is the stuff
-    '''
+    
     jarvis.wish_me()
     now = time()
     if now < 10:
@@ -135,6 +169,7 @@ def run_jarvis(jarvis):
         jarvis.speak(weather_rpt)
     else:
         jarvis.speak("how may I help you?")
+    
     # Check if jarvis has found me for timeout
     if visibility is True:
         capture_time = datetime.now()
@@ -145,22 +180,23 @@ def run_jarvis(jarvis):
         if remind_info is not None:
             jarvis.speak(remind_info)
 
-        # if not visibility:
-        # # code to look for me
-        #     if (datetime.now() - capture_time).total_seconds() > detection_timeout:
-        #         visibility = False
-        #         detect_incr_cnt = detect_incr_cnt + 1
-        #     elif detect_incr_cnt <= detect_cnt_limit:
-        #         visbility, frame = search()
-        #         visibility = True
-        #         if not visibility:
-        #             detect_incr_cnt = detect_incr_cnt + 1
-        #             capture_time = datetime.now()
-        #         else:
-        #             detect_incr_cnt = 0
-        #     else:
-        #         set_angle(180)
-        #     capture_time = datetime.now()
+        # Object detection logic
+        if not visibility:
+        # code to look for me
+            if (datetime.now() - capture_time).total_seconds() > detection_timeout:
+                visibility = False
+                detect_incr_cnt = detect_incr_cnt + 1
+            elif detect_incr_cnt <= detect_cnt_limit:
+                visbility, frame = search()
+                visibility = True
+                if not visibility:
+                    detect_incr_cnt = detect_incr_cnt + 1
+                    capture_time = datetime.now()
+                else:
+                    detect_incr_cnt = 0
+            else:
+                set_angle(180)
+            capture_time = datetime.now()
         
         query = ''
         query = jarvis.takeCommand().lower()
@@ -170,6 +206,7 @@ def run_jarvis(jarvis):
         if query == "none":
             continue
 
+        # Command processing logic
         if ('see me' in query) or ('find me' in query) or ('visible' in query):
             if (visibility is True) and ((datetime.now() - capture_time).total_seconds() < detection_timeout):
                 spk = ['Indeed, I can see you sir!', "Yep, I can see you", "Never took my sight off you sir"]
@@ -394,13 +431,16 @@ def run_jarvis(jarvis):
 
 
 if __name__ == "__main__":
+    """
+    Main entry point for Jarvis voice assistant.
+    Initializes hardware and starts the main execution loop.
+    """
     # Initialization for pigpio library
     os.system("sudo pigpiod")
-    # INITIALIZATION SEQUENCEx
+    # INITIALIZATION SEQUENCE
     init_gpio() # initialize GPIO
     init_cam()
     visibility, frame = search()
     print('hey')
     jarvis = VoiceEngine()
     run_jarvis(jarvis)
-
