@@ -1,0 +1,53 @@
+TEST YOUR CAMERA
+rpicam-hello --timeout 0
+
+BLUETOOTH
+bluetoothctl
+scan on
+pair <address>
+connect <address>
+
+RUNNING PYTHON SCRIPTS WITH IMAGE OUTPUTS
+export QT_QPA_PLATFORM=xcb
+sudo apt-get install xvfb
+xvfb-run python3 your_script.py
+
+INSTALL PYTHON
+sudo apt update && sudo apt upgrade -y
+sudo apt install python3 idle3
+
+CREATE VENV
+sudo apt-get install python-pip
+pip install virtualenv
+python3 -m venv myenv
+
+USING VENV
+source <venv_name>/bin/activate	; activating venv
+deactivate ; deactivating venv
+
+INSTALLING LIBS
+pip install <lib_name>
+
+CREATE A FILE
+nano <FILENAME> ; CTRL + X to save -> Y -> Enter
+
+SHUTDOWN RPI
+sudo shutdown now
+
+
+PICAMERA AND OPENCV AND PYTTSX3
+sudo apt-get install flac
+sudo apt install -y python3-picamera2
+sudo apt install libespeak1
+pip install geocoder opencv-python gtts speedtest RPi.GPIO pyttsx3 espeak wikipedia picamera2 googlesearch-python smtplib numpy pandas SpeechRecognition sounddevice pyowm RealtimeSTT
+sudo apt-get install espeak-ng 
+sudo apt-get install mpg321
+
+
+MISC 
+pip check - checks the dependencies within the installed python libraries
+pip install --upgrade <lib>
+sudo apt remove python3-<lib>
+
+
+
