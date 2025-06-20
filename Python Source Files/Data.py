@@ -2,14 +2,14 @@
 import geocoder
 
 # Look up tables
-clean_up_query =['my', 'jarvis', 'can you', 'hey', 'please', 'for', 'me', 'tell', 'what is']
+clean_up_query =['will you do me', 'can you do me', 'can you', 'will you', 'do me', 'a', 'and', 'my', 'jarvis', 'hey', 'please', 'for', 'me', 'tell', 'what is', 'favour']
 
 # Paths
-chrome_path = "chromium"
+chrome_path = r"C:\Program Files\Google\Chrome\Application\chrome.exe"
 
 # LUTs
 emails = {
-    "sameera official" : "sameerajsharma.ec19@rvce.edu.in",
+    "sameera official" : "ssharma818@gatech.edu",
     "sameera unofficial" : "sharmasameera91@gmail.com",
     "roopa" : "ysjtsha@gmail.com",
     "rupa" : "ysjtsha@gmail.com",

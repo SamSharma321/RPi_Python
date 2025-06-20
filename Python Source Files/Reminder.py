@@ -10,7 +10,7 @@ import random
 import googlesearch
 import smtplib
 
-reminder_script_path = r'/home/samram/jarvis2/src/remind.txt'
+reminder_script_path = r'remind.txt'
 
 def take_remind(reminder, time_str, priority, recurring):
     if "p.m." in time_str:
